@@ -16,21 +16,37 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 
 # Wstęp
 
+Wykorzystane dane to notowania historyczne MAK (Makarony Polskie S.A) na GPW,
+dane zostały pobrane z serwisu stooq.pl.
+
 ## MACD
 
 Przy analizie wykorzystamy następujący kod do wygenerowania wykresów:
 
-```{python, file='analyze_mak.py'}
+```{python, file='analyze.py'}
 ```
 
 ## Analiza
 
 Dla zakresu od 2007 do dnia dzisiejszego, nie jesteśmy w stanie nic wywnioskować z wykresu, zmniejszmy zatem zakres do 1000 ostatnich dni.
 
-```{python, file='mak_last_1000_days.py', echo=FALSE}
+```{python, echo=FALSE}
+import analyze
+analyze.analyze(last=1000)
 ```
 
 Tutaj już bardziej widzimy kilka ciekawszych miejsc. Przyjrzyjmy się bliżej pierwszej połowie 2022.
 
-```{python, file='mak_first_half_2022.py', echo=FALSE}
+```{python, echo=FALSE}
+import analyze
+analyze.analyze(start='2022-01-01', end='2022-07-31')
 ```
+
+# Wnioski
+
+<!--
+As the working week used to be 6-days, the period settings of (12, 26, 9) represent 2 weeks, 1 month and one and a half week.
+Now when the trading weeks have only 5 days, possibilities of changing the period settings cannot be overruled.
+However, it is always better to stick to the period settings which are used by the majority of traders as the
+buying and selling decisions based on the standard settings further push the prices in that direction.
+    -->

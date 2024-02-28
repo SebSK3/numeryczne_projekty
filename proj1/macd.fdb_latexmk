@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1709110236 "/home/sebsk/prog/studia/rozprochy_projekty/rozprochy_proj1/macd.tex" "macd.pdf" "macd" 1709110236 0
-  "/home/sebsk/prog/studia/rozprochy_projekty/rozprochy_proj1/macd.tex" 1709110234 9081 e645be5124f73d0e435e22311b27de52 ""
+["pdflatex"] 1709116189 "/home/sebsk/prog/studia/numeryczne_projekty/proj1/macd.tex" "macd.pdf" "macd" 1709116189 0
+  "/home/sebsk/prog/studia/numeryczne_projekty/proj1/macd.tex" 1709116187 10181 185190ecaf9975c6bd012082e558ea41 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc" 1704400182 2375 baa924870cfb487815765f9094cf3728 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc" 1704400182 3031 6c4d3515bf7115d8518af1c9ab97ca44 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1704400182 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -116,10 +116,10 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1704400182 40684 9b9ec0b4288972636ff6a3b9c4238efc ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1707908696 4483110 adb1e1d04498b9576f1f17c4219c5e03 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1707908681 6768054 e045568731c4c5fff79c1753e9443d96 ""
-  "macd.aux" 1709110236 1396 dbaf63cdb371043943719779013d91e9 "pdflatex"
-  "macd.tex" 1709110234 9081 e645be5124f73d0e435e22311b27de52 ""
-  "macd_files/figure-latex/unnamed-chunk-1-1.pdf" 1709110233 79460 b7c6f7e7fddc2ea838961caebe1ac9c3 ""
-  "macd_files/figure-latex/unnamed-chunk-2-3.pdf" 1709110234 30089 1e7cdc074cd5b593b3f57ab2acbf67c9 ""
+  "macd.aux" 1709116189 1396 870d57e101fcd6682a2c2d81e968a0f8 "pdflatex"
+  "macd.tex" 1709116187 10181 185190ecaf9975c6bd012082e558ea41 ""
+  "macd_files/figure-latex/unnamed-chunk-2-1.pdf" 1709116186 32050 93ca25d5d303ebaafc6bfd7e212a5b2a ""
+  "macd_files/figure-latex/unnamed-chunk-3-3.pdf" 1709116187 17572 1753e78ed8a943658d267f481196816f ""
   (generated)
   "macd.aux"
   "macd.log"
