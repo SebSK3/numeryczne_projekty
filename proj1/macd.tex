@@ -148,7 +148,7 @@ Przy analizie wykorzystamy następujący kod do wygenerowania wykresów:
 \NormalTok{df }\OperatorTok{=}\NormalTok{ pd.read\_csv(}\StringTok{\textquotesingle{}mak\_d.csv\textquotesingle{}}\NormalTok{)}
 \NormalTok{df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ pd.to\_datetime(df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{])}
 
-\NormalTok{own\_macd, own\_signal, \_ }\OperatorTok{=}\NormalTok{ calculate\_macd(df)}
+\NormalTok{macd, signal, \_ }\OperatorTok{=}\NormalTok{ calculate\_macd(df)}
 
 \NormalTok{closing\_price\_mean }\OperatorTok{=}\NormalTok{ df[}\StringTok{\textquotesingle{}Zamkniecie\textquotesingle{}}\NormalTok{].mean()}
 
@@ -156,8 +156,8 @@ Przy analizie wykorzystamy następujący kod do wygenerowania wykresów:
 
 \NormalTok{ax1.plot(df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{], df[}\StringTok{\textquotesingle{}Zamkniecie\textquotesingle{}}\NormalTok{], label}\OperatorTok{=}\StringTok{\textquotesingle{}Zamknięcie\textquotesingle{}}\NormalTok{)}\OperatorTok{;}
 \NormalTok{ax1.legend()}\OperatorTok{;}
-\NormalTok{ax2.plot(df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{], own\_macd, label}\OperatorTok{=}\StringTok{\textquotesingle{}MACD\textquotesingle{}}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}orange\textquotesingle{}}\NormalTok{)}\OperatorTok{;}
-\NormalTok{ax2.plot(df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{], own\_signal, label}\OperatorTok{=}\StringTok{\textquotesingle{}Sygnał\textquotesingle{}}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}green\textquotesingle{}}\NormalTok{)}\OperatorTok{;}
+\NormalTok{ax2.plot(df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{], macd, label}\OperatorTok{=}\StringTok{\textquotesingle{}MACD\textquotesingle{}}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}black\textquotesingle{}}\NormalTok{)}\OperatorTok{;}
+\NormalTok{ax2.plot(df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{], signal, label}\OperatorTok{=}\StringTok{\textquotesingle{}Sygnał\textquotesingle{}}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}red\textquotesingle{}}\NormalTok{)}\OperatorTok{;}
 \NormalTok{ax2.legend()}\OperatorTok{;}
 \NormalTok{plt.show()}
 \end{Highlighting}
@@ -167,9 +167,14 @@ Przy analizie wykorzystamy następujący kod do wygenerowania wykresów:
 
 \subsection{Analiza}\label{analiza}
 
-Przy zakresie od 2007, nie jesteśmy w stanie nic wywnioskować z wykresu,
-zmniejszmy zatem zakres do 1000 ostatnich dni.
+Dla zakresu od 2007 do dnia dzisiejszego, nie jesteśmy w stanie nic
+wywnioskować z wykresu, zmniejszmy zatem zakres do 1000 ostatnich dni.
 
 \includegraphics{macd_files/figure-latex/unnamed-chunk-2-3.pdf}
+
+Tutaj już bardziej widzimy kilka ciekawszych miejsc. Przyjrzyjmy się
+bliżej pierwszej połowie 2022.
+
+\includegraphics{macd_files/figure-latex/unnamed-chunk-3-5.pdf}
 
 \end{document}

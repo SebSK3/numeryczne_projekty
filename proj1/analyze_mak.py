@@ -33,8 +33,8 @@ fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
 
 ax1.plot(df['Data'], df['Zamkniecie'], label='Zamknięcie');
 ax1.legend();
-ax2.plot(df['Data'], macd, label='MACD', color='orange');
-ax2.plot(df['Data'], signal, label='Sygnał', color='green');
+ax2.plot(df['Data'], macd, label='MACD', color='black');
+ax2.plot(df['Data'], signal, label='Sygnał', color='red');
 ax2.legend();
 plt.show()
 

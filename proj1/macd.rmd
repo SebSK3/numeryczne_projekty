@@ -25,7 +25,12 @@ Przy analizie wykorzystamy następujący kod do wygenerowania wykresów:
 
 ## Analiza
 
-Przy zakresie od 2007, nie jesteśmy w stanie nic wywnioskować z wykresu, zmniejszmy zatem zakres do 1000 ostatnich dni.
+Dla zakresu od 2007 do dnia dzisiejszego, nie jesteśmy w stanie nic wywnioskować z wykresu, zmniejszmy zatem zakres do 1000 ostatnich dni.
 
 ```{python, file='mak_last_1000_days.py', echo=FALSE}
+```
+
+Tutaj już bardziej widzimy kilka ciekawszych miejsc. Przyjrzyjmy się bliżej pierwszej połowie 2022.
+
+```{python, file='mak_first_half_2022.py', echo=FALSE}
 ```

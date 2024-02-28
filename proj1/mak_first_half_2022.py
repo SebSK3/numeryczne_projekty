@@ -25,7 +25,9 @@ def calculate_macd(data, short_window=12, long_window=26, signal_window=9):
 df = pd.read_csv('mak_d.csv')
 df['Data'] = pd.to_datetime(df['Data'])
 
-df = df.tail(1000)
+start_date = '2022-01-01'
+end_date = '2022-07-31'
+df = df[(df['Data'] >= start_date) & (df['Data'] <= end_date)]
 
 macd, signal, _ = calculate_macd(df)
 
