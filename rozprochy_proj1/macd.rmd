@@ -1,7 +1,8 @@
 ---
-title: "Analiza techniczna MACD"
+title: "Analiza MACD"
 author: "Sebastian Kwaśniak"
 date: "`r Sys.Date()`"
+geometry: margin=2cm
 output:
     pdf_document:
         keep_tex: yes
@@ -13,21 +14,18 @@ library(reticulate)
 knitr::knit_engines$set(python = reticulate::eng_python)
 ```
 
+# Wstęp
+
 ## MACD
 
-<!--```{python, file='calculate_macd.py', eval=FALSE}
+Przy analizie wykorzystamy następujący kod do wygenerowania wykresów:
+
+```{python, file='analyze_mak.py'}
 ```
--->
 
-```{python}
-import numpy as np
-import matplotlib.pyplot as plt
+## Analiza
 
-n = 256
-X = np.linspace(-np.pi,np.pi,n,endpoint=True)
-Y = np.sin(2*X)
+Przy zakresie od 2007, nie jesteśmy w stanie nic wywnioskować z wykresu, zmniejszmy zatem zakres do 1000 ostatnich dni.
 
-plt.plot (X, Y+1, color='blue', alpha=1.00)
-plt.plot (X, Y-1, color='blue', alpha=1.00)
-plt.show()
+```{python, file='mak_last_1000_days.py', echo=FALSE}
 ```

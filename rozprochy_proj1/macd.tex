@@ -36,7 +36,7 @@
   \KOMAoptions{parskip=half}}
 \makeatother
 \usepackage{xcolor}
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=2cm]{geometry}
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -101,64 +101,75 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Analiza techniczna MACD},
+  pdftitle={Analiza MACD},
   pdfauthor={Sebastian Kwaśniak},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Analiza techniczna MACD}
+\title{Analiza MACD}
 \author{Sebastian Kwaśniak}
 \date{2024-02-28}
 
 \begin{document}
 \maketitle
 
+\section{Wstęp}\label{wstux119p}
+
 \subsection{MACD}\label{macd}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{def}\NormalTok{ calculate\_macd(data, short\_window}\OperatorTok{=}\DecValTok{12}\NormalTok{, long\_window}\OperatorTok{=}\DecValTok{26}\NormalTok{, signal\_window}\OperatorTok{=}\DecValTok{9}\NormalTok{):}
-\NormalTok{    short\_ema }\OperatorTok{=}\NormalTok{ calculate\_ema(data[}\StringTok{\textquotesingle{}Zamkniecie\textquotesingle{}}\NormalTok{], short\_window)}
-\NormalTok{    long\_ema }\OperatorTok{=}\NormalTok{ calculate\_ema(data[}\StringTok{\textquotesingle{}Zamkniecie\textquotesingle{}}\NormalTok{], long\_window)}
-\NormalTok{    macd\_line }\OperatorTok{=}\NormalTok{ short\_ema }\OperatorTok{{-}}\NormalTok{ long\_ema}
-\NormalTok{    signal\_line }\OperatorTok{=}\NormalTok{ calculate\_ema(macd\_line, signal\_window)}
-\NormalTok{    histogram }\OperatorTok{=}\NormalTok{ macd\_line }\OperatorTok{{-}}\NormalTok{ signal\_line}
-    \ControlFlowTok{return}\NormalTok{ macd\_line, signal\_line, histogram}
-\end{Highlighting}
-\end{Shaded}
+Przy analizie wykorzystamy następujący kod do wygenerowania wykresów:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
 \ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
 
-\NormalTok{n }\OperatorTok{=} \DecValTok{256}
-\NormalTok{X }\OperatorTok{=}\NormalTok{ np.linspace(}\OperatorTok{{-}}\NormalTok{np.pi,np.pi,n,endpoint}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
-\NormalTok{Y }\OperatorTok{=}\NormalTok{ np.sin(}\DecValTok{2}\OperatorTok{*}\NormalTok{X)}
+\KeywordTok{def}\NormalTok{ calculate\_eman(data, window):}
+\NormalTok{    alpha }\OperatorTok{=} \DecValTok{2} \OperatorTok{/}\NormalTok{ (window }\OperatorTok{+} \DecValTok{1}\NormalTok{)}
+\NormalTok{    eman }\OperatorTok{=}\NormalTok{ data.copy()}
+\NormalTok{    eman.iloc[}\DecValTok{0}\NormalTok{] }\OperatorTok{=}\NormalTok{ data.iloc[}\DecValTok{0}\NormalTok{]}
 
-\NormalTok{plt.plot (X, Y}\OperatorTok{+}\DecValTok{1}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}blue\textquotesingle{}}\NormalTok{, alpha}\OperatorTok{=}\FloatTok{1.00}\NormalTok{)}
-\NormalTok{plt.plot (X, Y}\OperatorTok{{-}}\DecValTok{1}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}blue\textquotesingle{}}\NormalTok{, alpha}\OperatorTok{=}\FloatTok{1.00}\NormalTok{)}
+    \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, }\BuiltInTok{len}\NormalTok{(data)):}
+\NormalTok{        eman.iloc[i] }\OperatorTok{=}\NormalTok{ alpha }\OperatorTok{*}\NormalTok{ data.iloc[i] }\OperatorTok{+}\NormalTok{ (}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ alpha) }\OperatorTok{*}\NormalTok{ eman.iloc[i }\OperatorTok{{-}} \DecValTok{1}\NormalTok{]}
+    \ControlFlowTok{return}\NormalTok{ eman}
+
+\KeywordTok{def}\NormalTok{ calculate\_macd(data, short\_window}\OperatorTok{=}\DecValTok{12}\NormalTok{, long\_window}\OperatorTok{=}\DecValTok{26}\NormalTok{, signal\_window}\OperatorTok{=}\DecValTok{9}\NormalTok{):}
+\NormalTok{    short\_ema }\OperatorTok{=}\NormalTok{ calculate\_eman(data[}\StringTok{\textquotesingle{}Zamkniecie\textquotesingle{}}\NormalTok{], short\_window)}
+\NormalTok{    long\_ema }\OperatorTok{=}\NormalTok{ calculate\_eman(data[}\StringTok{\textquotesingle{}Zamkniecie\textquotesingle{}}\NormalTok{], long\_window)}
+
+\NormalTok{    macd\_line }\OperatorTok{=}\NormalTok{ short\_ema }\OperatorTok{{-}}\NormalTok{ long\_ema}
+
+\NormalTok{    signal\_line }\OperatorTok{=}\NormalTok{ calculate\_eman(macd\_line, signal\_window)}
+
+\NormalTok{    histogram }\OperatorTok{=}\NormalTok{ macd\_line }\OperatorTok{{-}}\NormalTok{ signal\_line}
+
+    \ControlFlowTok{return}\NormalTok{ macd\_line, signal\_line, histogram}
+
+\NormalTok{df }\OperatorTok{=}\NormalTok{ pd.read\_csv(}\StringTok{\textquotesingle{}mak\_d.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{] }\OperatorTok{=}\NormalTok{ pd.to\_datetime(df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{])}
+
+\NormalTok{own\_macd, own\_signal, \_ }\OperatorTok{=}\NormalTok{ calculate\_macd(df)}
+
+\NormalTok{closing\_price\_mean }\OperatorTok{=}\NormalTok{ df[}\StringTok{\textquotesingle{}Zamkniecie\textquotesingle{}}\NormalTok{].mean()}
+
+\NormalTok{fig, (ax1, ax2) }\OperatorTok{=}\NormalTok{ plt.subplots(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{14}\NormalTok{, }\DecValTok{10}\NormalTok{), sharex}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+
+\NormalTok{ax1.plot(df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{], df[}\StringTok{\textquotesingle{}Zamkniecie\textquotesingle{}}\NormalTok{], label}\OperatorTok{=}\StringTok{\textquotesingle{}Zamknięcie\textquotesingle{}}\NormalTok{)}\OperatorTok{;}
+\NormalTok{ax1.legend()}\OperatorTok{;}
+\NormalTok{ax2.plot(df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{], own\_macd, label}\OperatorTok{=}\StringTok{\textquotesingle{}MACD\textquotesingle{}}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}orange\textquotesingle{}}\NormalTok{)}\OperatorTok{;}
+\NormalTok{ax2.plot(df[}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{], own\_signal, label}\OperatorTok{=}\StringTok{\textquotesingle{}Sygnał\textquotesingle{}}\NormalTok{, color}\OperatorTok{=}\StringTok{\textquotesingle{}green\textquotesingle{}}\NormalTok{)}\OperatorTok{;}
+\NormalTok{ax2.legend()}\OperatorTok{;}
 \NormalTok{plt.show()}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{macd_files/figure-latex/unnamed-chunk-2-1.pdf}
+\includegraphics{macd_files/figure-latex/unnamed-chunk-1-1.pdf}
 
-\subsection{EMAN}\label{eman}
+\subsection{Analiza}\label{analiza}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{def}\NormalTok{ calculate\_ema(data, window):}
-\NormalTok{    alpha }\OperatorTok{=} \DecValTok{2} \OperatorTok{/}\NormalTok{ (window }\OperatorTok{+} \DecValTok{1}\NormalTok{)}
-\NormalTok{    ema }\OperatorTok{=}\NormalTok{ data.copy()}
-\NormalTok{    ema.iloc[}\DecValTok{0}\NormalTok{] }\OperatorTok{=}\NormalTok{ data.iloc[}\DecValTok{0}\NormalTok{]}
+Przy zakresie od 2007, nie jesteśmy w stanie nic wywnioskować z wykresu,
+zmniejszmy zatem zakres do 1000 ostatnich dni.
 
-    \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, }\BuiltInTok{len}\NormalTok{(data)):}
-\NormalTok{        ema.iloc[i] }\OperatorTok{=}\NormalTok{ alpha }\OperatorTok{*}\NormalTok{ data.iloc[i] }\OperatorTok{+}\NormalTok{ (}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ alpha) }\OperatorTok{*}\NormalTok{ ema.iloc[i }\OperatorTok{{-}} \DecValTok{1}\NormalTok{]}
-
-    \ControlFlowTok{return}\NormalTok{ ema}
-\end{Highlighting}
-\end{Shaded}
-
+\includegraphics{macd_files/figure-latex/unnamed-chunk-2-3.pdf}
 
 \end{document}

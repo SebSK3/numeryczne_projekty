@@ -25,17 +25,20 @@ def calculate_macd(data, short_window=12, long_window=26, signal_window=9):
 df = pd.read_csv('mak_d.csv')
 df['Data'] = pd.to_datetime(df['Data'])
 
+df = df.tail(1000)
+
 macd, signal, _ = calculate_macd(df)
 
 closing_price_mean = df['Zamkniecie'].mean()
 
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 7), sharex=True)
 
 ax1.plot(df['Data'], df['Zamkniecie'], label='Zamknięcie');
 ax1.legend();
 ax2.plot(df['Data'], macd, label='MACD', color='orange');
-ax2.plot(df['Data'], signal, label='Sygnał', color='green');
+ax2.plot(df['Data'], signal, label='Sygnał', color='red');
 ax2.legend();
 plt.show()
+
 
 
