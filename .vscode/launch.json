@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Render R Markdown",
+            "type": "f5anything",
+            "request": "launch",
+            "command": "Rscript -e 'rmarkdown::render(\"${fileDirname}/${fileBasenameNoExtension}.rmd\")'",
+            "showTerminal": false
+        }
+    ]
+}
