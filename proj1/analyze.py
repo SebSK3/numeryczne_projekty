@@ -22,7 +22,7 @@ def calculate_macd(data, short_window=12, long_window=26, signal_window=9):
 
     return macd_line, signal_line, histogram
 
-def analyze(start = None, end = None, last = None):
+def analyze(start = None, end = None, last = None, plot=True):
     df = pd.read_csv('mak_d.csv')
     df['Data'] = pd.to_datetime(df['Data'])
 
@@ -33,15 +33,15 @@ def analyze(start = None, end = None, last = None):
         df = df.tail(last)
     macd, signal, _ = calculate_macd(df)
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
-
-    ax1.plot(df['Data'], df['Zamkniecie'], label='Closing Price');
-    ax1.legend();
-    ax2.plot(df['Data'], macd, label='MACD', color='black');
-    ax2.plot(df['Data'], signal, label='Sygnał', color='red');
-    ax2.legend();
-    plt.show()
-
+    if plot:
+        _, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
+        ax1.plot(df['Data'], df['Zamkniecie'], label='Closing Price');
+        ax1.legend();
+        ax2.plot(df['Data'], macd, label='MACD', color='black');
+        ax2.plot(df['Data'], signal, label='Sygnał', color='red');
+        ax2.legend();
+        plt.show()
+    return df, macd, signal
 
 
 

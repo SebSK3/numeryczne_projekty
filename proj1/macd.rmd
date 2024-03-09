@@ -1,4 +1,6 @@
 ---
+header-includes:
+    - \usepackage{needspace}
 title: "Analiza MACD"
 author: "Sebastian Kwaśniak"
 date: "`r Sys.Date()`"
@@ -28,19 +30,78 @@ Przy analizie wykorzystamy następujący kod do wygenerowania wykresów:
 
 ## Analiza
 
-Dla zakresu od 2007 do dnia dzisiejszego, nie jesteśmy w stanie nic wywnioskować z wykresu, zmniejszmy zatem zakres do 1000 ostatnich dni.
+Dla zakresu od 2007 do dnia dzisiejszego, nie jesteśmy w stanie nic wywnioskować z wykresu,
+zmniejszmy zatem zakres do 1000 ostatnich dni.
 
 ```{python, echo=FALSE}
 import analyze
-analyze.analyze(last=1000)
+_, _, _ = analyze.analyze(last=1000)
 ```
 
 Tutaj już bardziej widzimy kilka ciekawszych miejsc. Przyjrzyjmy się bliżej pierwszej połowie 2022.
 
 ```{python, echo=FALSE}
 import analyze
-analyze.analyze(start='2022-01-01', end='2022-07-31')
+_, _, _ = analyze.analyze(start='2022-01-01', end='2022-07-31', plot=True)
 ```
+
+# Analiza przy automatycznym kupnie
+Do automatycznej analizy wykorzystamy prosty kod:
+
+\needspace{30\baselineskip}
+```{python, file='buy_sell_alg.py'}
+```
+
+Dla zakresu od 2022-01-01 do 2022-07-31 momenty kupna i sprzedaży wyglądają następująco:
+
+```{python, echo=FALSE}
+import pandas as pd
+import matplotlib.pyplot as plt
+import analyze
+import buy_sell_alg
+
+starting_capital = 1000
+
+df, macd, signal = analyze.analyze(start='2022-01-01', end='2022-07-31', plot=False)
+capital = buy_sell_alg.buy_sell_alg(df, macd, signal, starting_capital)
+_, ax1 = plt.subplots(figsize=(14, 7))
+ax1.plot(df['Data'], df['Zamkniecie'], label='Closing Price')
+ax1.legend()
+ax1.scatter(df["Data"], df['Kupno'], color='green', label='Buy', marker='^')
+ax1.scatter(df["Data"], df['Sprzedaz'], color='red', label='Sell', marker='v')
+capital_do_nothing = (df['Zamkniecie'].iloc[-1]/df['Zamkniecie'].iloc[0])*starting_capital
+```
+
+Jeśli zaczynalibyśmy z kapitałem `r py$starting_capital`zł, wtedy nasz kapitał urósłby do:
+`r prettyNum(round(py$capital,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
+zł. Tymczasem, gdybyśmy po prostu kupili na samym początku i sprzedali na samym końcu tego okresu,
+wtedy mielibyśmy
+`r prettyNum(round(py$capital_do_nothing,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
+zł.
+
+```{python, echo=FALSE}
+import pandas as pd
+import matplotlib.pyplot as plt
+import analyze
+import buy_sell_alg
+
+starting_capital = 1000
+
+df, macd, signal = analyze.analyze(plot=False)
+capital = buy_sell_alg.buy_sell_alg(df, macd, signal, starting_capital)
+df.to_csv("result.csv", index=False)
+capital_do_nothing = (df['Zamkniecie'].iloc[-1]/df['Zamkniecie'].iloc[0])*starting_capital
+```
+
+Gdy wziąć taki sam kapitał i jako zakres dać cały okres spółki Makarony Polskie na giełdzie, to wyniki prezentują
+się w następujący sposób:
+`r prettyNum(round(py$capital,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
+zł. Tymczasem, gdybyśmy po prostu kupili na samym początku i sprzedali na samym końcu tego okresu,
+wtedy mielibyśmy
+`r prettyNum(round(py$capital_do_nothing,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
+zł.
+
+
 
 # Wnioski
 
