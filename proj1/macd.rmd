@@ -91,16 +91,21 @@ df, macd, signal = analyze.analyze(plot=False)
 capital = buy_sell_alg.buy_sell_alg(df, macd, signal, starting_capital)
 df.to_csv("result.csv", index=False)
 capital_do_nothing = (df['Zamkniecie'].iloc[-1]/df['Zamkniecie'].iloc[0])*starting_capital
+
+df['Pieniedzy'] = df['Pieniedzy'].interpolate()
+
+_, ax1 = plt.subplots(figsize=(14, 7))
+ax1.plot(df['Data'], df['Pieniedzy'], label='Pieniędzy', color='green')
+ax1.legend()
+
 ```
 
-Gdy wziąć taki sam kapitał i jako zakres dać cały okres spółki Makarony Polskie na giełdzie, to wyniki prezentują
-się w następujący sposób:
+Gdy wziąć taki sam kapitał i jako zakres dać cały okres spółki Makarony Polskie na giełdzie, to mielibyśmy
 `r prettyNum(round(py$capital,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
-zł. Tymczasem, gdybyśmy po prostu kupili na samym początku i sprzedali na samym końcu tego okresu,
+zł, jest to spadek prawie 80%. Tymczasem, gdybyśmy po prostu kupili na samym początku i sprzedali na samym końcu tego okresu,
 wtedy mielibyśmy
 `r prettyNum(round(py$capital_do_nothing,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
 zł.
-
 
 
 # Wnioski

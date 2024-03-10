@@ -1,3 +1,4 @@
+import pandas as pd
 from enum import Enum
 class Position(Enum):
     NONE = 0
@@ -22,7 +23,10 @@ def buy_sell_alg(df, macd, signal, starting_money=1000):
             sell_price = df['Zamkniecie'].iloc[i]
             df.at[df.index[i], 'Sprzedaz'] = sell_price
             money = quantity * sell_price
-        df.loc[df.index[i], 'Pieniedzy'] = money
+        if money != 0:
+            df.loc[df.index[i], 'Pieniedzy'] = money
+        else:
+            df.loc[df.index[i], 'Pieniedzy'] = pd.NA
 
     # Zamknij ostatnią pozycję
     if position == Position.LONG:
