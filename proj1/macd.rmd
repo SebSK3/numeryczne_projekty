@@ -35,7 +35,7 @@ zmniejszmy zatem zakres do 1000 ostatnich dni.
 
 ```{python, echo=FALSE}
 import analyze
-_, _, _ = analyze.analyze(last=1000)
+_, _, _ = analyze.analyze()
 ```
 
 Tutaj już bardziej widzimy kilka ciekawszych miejsc. Przyjrzyjmy się bliżej pierwszej połowie 2022.
@@ -85,12 +85,12 @@ import matplotlib.pyplot as plt
 import analyze
 import buy_sell_alg
 
-starting_capital = 1000
+starting_quantity = 1000
 
 df, macd, signal = analyze.analyze(plot=False)
-capital = buy_sell_alg.buy_sell_alg(df, macd, signal, starting_capital)
+capital = buy_sell_alg.buy_sell_alg(df, macd, signal, starting_money=0, starting_quantity=starting_quantity)
 df.to_csv("result.csv", index=False)
-capital_do_nothing = (df['Zamkniecie'].iloc[-1]/df['Zamkniecie'].iloc[0])*starting_capital
+capital_do_nothing = df['Zamkniecie'].iloc[-1]*starting_quantity
 
 df['Pieniedzy'] = df['Pieniedzy'].interpolate()
 
@@ -100,7 +100,7 @@ ax1.legend()
 
 ```
 
-Gdy wziąć taki sam kapitał i jako zakres dać cały okres spółki Makarony Polskie na giełdzie, to mielibyśmy
+Gdybyśmy zaczęli z 1000 akcjami na start, to na koniec mielibyśmy
 `r prettyNum(round(py$capital,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
 zł, jest to spadek prawie 80%. Tymczasem, gdybyśmy po prostu kupili na samym początku i sprzedali na samym końcu tego okresu,
 wtedy mielibyśmy
