@@ -90,8 +90,10 @@ starting_quantity = 1000
 df, macd, signal = analyze.analyze(plot=False)
 capital = buy_sell_alg.buy_sell_alg(df, macd, signal, starting_money=0, starting_quantity=starting_quantity)
 df.to_csv("result.csv", index=False)
+macd_capital_percentage = 100-(capital*100/(starting_quantity*df['Zamkniecie'][0]))
 capital_do_nothing = df['Zamkniecie'].iloc[-1]*starting_quantity
 
+capital_percentage = (capital_do_nothing*100/(starting_quantity*df['Zamkniecie'][0]))-100
 df['Pieniedzy'] = df['Pieniedzy'].interpolate()
 
 _, ax1 = plt.subplots(figsize=(14, 7))
@@ -100,12 +102,15 @@ ax1.legend()
 
 ```
 
-Gdybyśmy zaczęli z 1000 akcjami na start, to na koniec mielibyśmy
+Gdybyśmy zaczęli z `r py$starting_quantity` akcjami na start, to na koniec mielibyśmy
 `r prettyNum(round(py$capital,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
-zł, jest to spadek prawie 80%. Tymczasem, gdybyśmy po prostu kupili na samym początku i sprzedali na samym końcu tego okresu,
+zł, jest to spadek na poziomie
+`r prettyNum(round(py$macd_capital_percentage,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`%.
+Tymczasem, gdybyśmy po prostu kupili na samym początku i sprzedali na samym końcu tego okresu,
 wtedy mielibyśmy
 `r prettyNum(round(py$capital_do_nothing,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
-zł.
+zł, czyli
+`r prettyNum(round(py$capital_percentage,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`% zysku.
 
 
 # Wnioski
