@@ -1,22 +1,22 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def calculate_eman(data, N):
+def calculate_ema(data, N):
     alpha = 2 / (N + 1)
-    eman = data.copy()
-    eman.iloc[0] = data.iloc[0]
+    ema = data.copy()
+    ema.iloc[0] = data.iloc[0]
 
     for i in range(1, len(data)):
-        eman.iloc[i] = alpha * data.iloc[i] + (1 - alpha) * eman.iloc[i - 1]
-    return eman
+        ema.iloc[i] = alpha * data.iloc[i] + (1 - alpha) * ema.iloc[i - 1]
+    return ema
 
 def calculate_macd(data, short_window=12, long_window=26, signal_window=9):
-    short_ema = calculate_eman(data['Zamkniecie'], short_window)
-    long_ema = calculate_eman(data['Zamkniecie'], long_window)
+    short_ema = calculate_ema(data['Zamkniecie'], short_window)
+    long_ema = calculate_ema(data['Zamkniecie'], long_window)
 
     macd_line = short_ema - long_ema
 
-    signal_line = calculate_eman(macd_line, signal_window)
+    signal_line = calculate_ema(macd_line, signal_window)
 
     histogram = macd_line - signal_line
 
