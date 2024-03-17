@@ -20,43 +20,40 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 
 # Wstęp
 
+W tym projekcie zostanie omówione narzędzie analizy technicznej znane
+jako MACD (Moving Average Convergence Divergence). 
+MACD to wskaźnik służący do analizy trendów i sygnałów 
+kupna/sprzedaży na wykresach cenowych.
+Założenia MACD to: dwie średnie kroczące, które pozwalają wykryć zmiany trendów;
+linia sygnałowa, która pozwala potwierdzić sygnał kupna i sprzedaży;
+histogram który wskazuje siłe lub słabość trendu.
+
+
 Wykorzystane dane to notowania historyczne MAK (Makarony Polskie S.A) na GPW,
 dane zostały pobrane z serwisu stooq.pl.
 
 ## MACD
 
-Przy analizie wykorzystamy następujący kod do wygenerowania wykresów:
+Przy analizie został wykorzystany następujący kod do wygenerowania wykresów:
 
 ```{python, file='analyze.py'}
 ```
 
-## Analiza
-
-Dla zakresu od 2007 do dnia dzisiejszego, nie jesteśmy w stanie nic wywnioskować z wykresu,
-zmniejszmy zatem zakres do 1000 ostatnich dni.
+Dla zakresu od 2007 do dnia dzisiejszego:
 
 ```{python, echo=FALSE}
 import analyze
 _, _, _ = analyze.analyze()
 ```
 
-Tutaj już bardziej widzimy kilka ciekawszych miejsc. Przyjrzyjmy się bliżej pierwszej połowie 2022.
+Ceny przy zamknięciach dla ostatnich 1000 dni wykresy wyglądają tak:
 
 ```{python, echo=FALSE}
 import analyze
-_, _, _ = analyze.analyze(start='2022-01-01', end='2022-07-31', plot=True)
+_, _, _ = analyze.analyze(last=1000, plot=True)
 ```
 
-W okolicy marca MACD w miarę dobrze pokazało kiedy kupić i sprzedać. 
-Widzimy także, że sygnał kupna i sprzedaży jest nieco opóźniony, gdyby były trochę wcześniej,
-to zyski byłyby znacznie większe.
-
-# Analiza przy automatycznym kupnie
-Do automatycznej analizy wykorzystamy prosty kod:
-
-\needspace{30\baselineskip}
-```{python, file='buy_sell_alg.py'}
-```
+## Analiza
 
 Dla zakresu od 2022-01-01 do 2022-07-31 momenty kupna i sprzedaży wyglądają następująco:
 
@@ -71,18 +68,58 @@ starting_capital = 1000
 df, macd, signal = analyze.analyze(start='2022-01-01', end='2022-07-31', plot=False)
 capital = buy_sell_alg.buy_sell_alg(df, macd, signal, starting_capital)
 _, ax1 = plt.subplots(figsize=(14, 7))
-ax1.plot(df['Data'], df['Zamkniecie'], label='Closing Price')
+ax1.plot(df['Data'], df['Zamkniecie'], label='Cena przy zamknięciu')
 ax1.legend()
 ax1.scatter(df["Data"], df['Kupno'], color='green', label='Buy', marker='^')
 ax1.scatter(df["Data"], df['Sprzedaz'], color='red', label='Sell', marker='v')
 capital_do_nothing = (df['Zamkniecie'].iloc[-1]/df['Zamkniecie'].iloc[0])*starting_capital
 ```
 
-Jeśli zaczynalibyśmy z kapitałem `r py$starting_capital`zł, wtedy nasz kapitał urósłby do:
+Na samym początku tego okresu widać, że sygnał kupna i sprzedaży jest dwukrotnie zły i powoduje straty,
+ale okolicy marca MACD w miarę dobrze pokazało kiedy kupić i sprzedać. 
+Można zauważyć, że sygnały są nieco opóźnione, gdyby były trochę wcześniej,
+to zyski byłyby znacznie większe, a straty byłyby niższe, lub wcale by ich nie było.
+
+
+Drugim ciekawie wyglądającym momentem jest pierwsza połowa roku 2023.
+
+```{python, echo=FALSE}
+import pandas as pd
+import matplotlib.pyplot as plt
+import analyze
+import buy_sell_alg
+
+starting_capital = 1000
+
+df, macd, signal = analyze.analyze(start='2023-01-01', end='2023-07-31', plot=True)
+_ = buy_sell_alg.buy_sell_alg(df, macd, signal, starting_capital)
+_, ax1 = plt.subplots(figsize=(14, 7))
+ax1.plot(df['Data'], df['Zamkniecie'], label='Cena przy zamknięciu')
+ax1.legend()
+ax1.scatter(df["Data"], df['Kupno'], color='green', label='Buy', marker='^')
+ax1.scatter(df["Data"], df['Sprzedaz'], color='red', label='Sell', marker='v')
+```
+
+Trzykrotnie pod rząd następują straty: w marcu kwietniu oraz czerwcu.
+Dla marca, jasno widać, że chodzi o opóźnienie, ale dla
+sytuacji w kwietniu MACD nie poradził sobie z nagłymi skokami ceny.
+
+
+
+## Analiza przy automatycznym kupnie
+Do automatycznej analizy wykorzystamy prosty kod:
+
+<!--\needspace{30\baselineskip} -->
+```{python, file='buy_sell_alg.py'}
+```
+
+Dla pierwszej połowy 2022, gdyby zacząć z kapitałem
+`r py$starting_capital`zł, wtedy na koniec byłoby:
 `r prettyNum(round(py$capital,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
-zł. Tymczasem, gdybyśmy po prostu kupili na samym początku i sprzedali na samym końcu tego okresu,
-wtedy mielibyśmy
-`r prettyNum(round(py$capital_do_nothing,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
+zł. Tymczasem, gdyby po prostu kupić na samym początku 
+i sprzedać na samym końcu tego okresu,
+wtedy finalna kwota byłaby:
+`r prettyNum(round(py$capital_do_nothing,2), big.mark = "&nbsp;", decimal.mark = ",", scientific = FALSE)`
 zł.
 
 ```{python, echo=FALSE}
@@ -92,6 +129,7 @@ import analyze
 import buy_sell_alg
 
 starting_quantity = 1000
+starting_money = df['Zamkniecie'].iloc[0]*starting_quantity
 
 df, macd, signal = analyze.analyze(plot=False)
 capital = buy_sell_alg.buy_sell_alg(df, macd, signal, starting_money=0, starting_quantity=starting_quantity)
@@ -108,26 +146,40 @@ ax1.legend()
 
 ```
 
-Gdybyśmy zaczęli z `r py$starting_quantity` akcjami na start, to na koniec mielibyśmy
-`r prettyNum(round(py$capital,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
+Dla całego okresu Makaronów Polskich S.A, gdyby zacząć z
+`r py$starting_quantity` akcjami na start
+(`r prettyNum(round(py$starting_money,2), big.mark = "&nbsp;", decimal.mark = ",", scientific = FALSE)`zł), 
+to na koniec spadłoby to aż do
+`r prettyNum(round(py$capital,2), big.mark = "&nbsp;", decimal.mark = ",", scientific = FALSE)`
 zł, jest to spadek na poziomie
 `r prettyNum(round(py$macd_capital_percentage,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`%.
-Tymczasem, gdybyśmy po prostu kupili na samym początku i sprzedali na samym końcu tego okresu,
-wtedy mielibyśmy
-`r prettyNum(round(py$capital_do_nothing,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
+Tymczasem, gdyby po prostu kupić na samym początku i sprzedać na samym końcu tego okresu,
+wtedy finalny majątek byłby:
+`r prettyNum(round(py$capital_do_nothing,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`,00
 zł, czyli
 `r prettyNum(round(py$capital_percentage,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`% zysku.
 
 
 # Wnioski
 
-MACD opiera się na błędnej logice, ponieważ jak wyczytamy pochodzenie typowych wartości
-short window, long window, oraz signal window, to okaże się, że pochodzą 
-z czasów, gdy roboczy tydzień trwał 6 dni[@wiki:MACD]. 
-Short window trwa 2 tygodnie robocze (12), long trwa miesiąc (26), a signal półtora tygodnia (9).
-Gdyby dostosować do czasów aktualnych, to wartości te powinny być inne, lecz
-zalecane jest korzystanie z wartości takich, jak większość osób które grają na giełdzie.
 
+MACD opiera się na błędnym założeniu, 
+ponieważ typowe wartości dla okna krótkiego, 
+długiego oraz sygnału pochodzą z czasów, gdy tydzień roboczy 
+liczył 6 dni [@wiki:MACD]. Okno krótkie trwało 2 tygodnie (12 dni), 
+okno długie - miesiąc (26 dni), a okno sygnału - półtora tygodnia (9 dni).
+Oczywiście, dostosowanie tych wartości do obecnych czasów byłoby 
+wskazane, jednak zalecane jest trzymanie się tych standardowych, 
+jak większość inwestorów na rynku giełdowym.
+
+Ponadto, z analizy wynika, że MACD zawsze reaguje z opóźnieniem, 
+co skutkuje brakiem trafności w momencie wejścia i wyjścia z rynku. 
+W efekcie może to prowadzić do generowania strat, 
+szczególnie w warunkach dużych wahań cenowych. 
+Dlatego też, nie jest to narzędzie optymalne dla 
+wszystkich sytuacji rynkowych.
+
+# Źródła
 <!--
 As the working week used to be 6-days, the period settings of (12, 26, 9) represent 2 weeks, 1 month and one and a half week.
 Now when the trading weeks have only 5 days, possibilities of changing the period settings cannot be overruled.

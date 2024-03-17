@@ -35,7 +35,7 @@ def analyze(start = None, end = None, last = None, plot=True):
 
     if plot:
         _, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
-        ax1.plot(df['Data'], df['Zamkniecie'], label='Closing Price');
+        ax1.plot(df['Data'], df['Zamkniecie'], label='Cena przy zamknięciu');
         ax1.legend();
         ax2.plot(df['Data'], macd, label='MACD', color='black');
         ax2.plot(df['Data'], signal, label='Sygnał', color='red');
