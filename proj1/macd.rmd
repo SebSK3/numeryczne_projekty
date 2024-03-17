@@ -8,6 +8,8 @@ geometry: margin=2cm
 output:
     pdf_document:
         keep_tex: yes
+bibliography: bibliography.bib
+csl: vancouver.csl
 ---
 
 ```{r setup, include=FALSE}
@@ -44,6 +46,10 @@ Tutaj już bardziej widzimy kilka ciekawszych miejsc. Przyjrzyjmy się bliżej p
 import analyze
 _, _, _ = analyze.analyze(start='2022-01-01', end='2022-07-31', plot=True)
 ```
+
+W okolicy marca MACD w miarę dobrze pokazało kiedy kupić i sprzedać. 
+Widzimy także, że sygnał kupna i sprzedaży jest nieco opóźniony, gdyby były trochę wcześniej,
+to zyski byłyby znacznie większe.
 
 # Analiza przy automatycznym kupnie
 Do automatycznej analizy wykorzystamy prosty kod:
@@ -114,6 +120,13 @@ zł, czyli
 
 
 # Wnioski
+
+MACD opiera się na błędnej logice, ponieważ jak wyczytamy pochodzenie typowych wartości
+short window, long window, oraz signal window, to okaże się, że pochodzą 
+z czasów, gdy roboczy tydzień trwał 6 dni[@wiki:MACD]. 
+Short window trwa 2 tygodnie robocze (12), long trwa miesiąc (26), a signal półtora tygodnia (9).
+Gdyby dostosować do czasów aktualnych, to wartości te powinny być inne, lecz
+zalecane jest korzystanie z wartości takich, jak większość osób które grają na giełdzie.
 
 <!--
 As the working week used to be 6-days, the period settings of (12, 26, 9) represent 2 weeks, 1 month and one and a half week.
