@@ -1,3 +1,3 @@
 # First project
 
-[Link](rozprochy_proj1/macd.pdf)
+[Link](proj1/macd.pdf)
