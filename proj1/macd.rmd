@@ -18,6 +18,18 @@ library(reticulate)
 knitr::knit_engines$set(python = reticulate::eng_python)
 ```
 
+```{r, echo=FALSE}
+print_money <- function(var) {
+  formatted_value <- prettyNum(
+    round(var, 2),
+    big.mark = "&nbsp;",
+    decimal.mark = ",",
+    scientific = FALSE
+  )
+  return(formatted_value)
+}
+```
+
 # Wstęp
 
 W tym projekcie zostanie omówione narzędzie analizy technicznej znane
@@ -115,12 +127,8 @@ Do automatycznej analizy wykorzystamy prosty kod:
 
 Dla pierwszej połowy 2022, gdyby zacząć z kapitałem
 `r py$starting_capital`zł, wtedy na koniec byłoby:
-`r prettyNum(round(py$capital,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`
-zł. Tymczasem, gdyby po prostu kupić na samym początku
-i sprzedać na samym końcu tego okresu,
-wtedy finalna kwota byłaby:
-`r prettyNum(round(py$capital_do_nothing,2), big.mark = "&nbsp;", decimal.mark = ",", scientific = FALSE)`
-zł.
+`r print_money(py$capital)` zł. Tymczasem, gdyby po prostu kupić na samym początku
+i sprzedać na samym końcu tego okresu, wtedy finalna kwota byłaby: `r print_money(py$capital_do_nothing)`zł.
 
 ```{python, echo=FALSE}
 import pandas as pd
@@ -148,17 +156,12 @@ ax1.legend()
 ```
 
 Dla okresu ostatnich 1000 dni Makaronów Polskich S.A, gdyby zacząć z
-`r py$starting_quantity` akcjami na start
-(`r prettyNum(round(py$starting_money,2), big.mark = "&nbsp;", decimal.mark = ",", scientific = FALSE)`zł),
-to na koniec wzrosłoby to aż do
-`r prettyNum(round(py$capital,2), big.mark = "&nbsp;", decimal.mark = ",", scientific = FALSE)`
-zł, jest to wzrost na poziomie
-`r prettyNum(round(py$macd_capital_percentage,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`%.
+`r py$starting_quantity` akcjami na start (`r print_money(py$starting_money)`zł)
+to na koniec wzrosłoby to aż do `r print_money(py$capital)` zł, jest to wzrost na poziomie
+`r print_money(py$macd_capital_percentage)`%.
 Tymczasem, gdyby po prostu kupić na samym początku i sprzedać na samym końcu tego okresu,
-wtedy finalny majątek byłby:
-`r prettyNum(round(py$capital_do_nothing,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`,00
-zł, czyli
-`r prettyNum(round(py$capital_percentage,2), big.mark = " ", decimal.mark = ",", scientific = FALSE)`% zysku.
+wtedy finalny majątek byłby: `r print_money(py$capital_do_nothing)`zł,
+czyli `r print_money(py$capital_percentage)`% zysku.
 
 ```{python, echo=FALSE}
 import pandas as pd
@@ -178,8 +181,7 @@ macd_capital_percentage = (capital*100/(starting_quantity*df['Zamkniecie'].iloc[
 ```
 
 Jeśli jednak weźmiemy pod uwagę cały okres Makaronów Polskich (od 2007 roku), to mamy sytuację spadku
-do `r prettyNum(round(py$capital,2), big.mark = "&nbsp;", decimal.mark = ",", scientific = FALSE)`zł, mimo że
-spółka ma tendencje wzrostowe.
+do `r print_money(py$capital)`zł, mimo że spółka ma tendencje wzrostowe.
 
 # Wnioski
 
