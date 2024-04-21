@@ -1,0 +1,162 @@
+---
+header-includes:
+    - \usepackage{needspace}
+title: "Analiza MACD"
+author: "Sebastian Kwaśniak"
+date: "`r Sys.Date()`"
+geometry: margin=2cm
+output:
+    pdf_document:
+        keep_tex: yes
+    dev: ragg_png
+bibliography: bibliography.bib
+csl: vancouver.csl
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(reticulate)
+library(Rcpp)
+
+knitr::knit_engines$set(python = reticulate::eng_python)
+```
+
+# Wstęp
+
+W ramach projektu wymagane jest zaimplementowanie trzech sposobów rozwiązywania układów równań liniowych.
+Metody to: Jacobiego (iteracyjna), Gaussa-Seidla (iteracyjna), oraz faktoryzacja LU (bezpośrednia).
+
+Metody te były już opisane w ramach wykładu oraz trzeciego laboratorium.
+We wszystkich trzech metodach, najpierw dzielimy macierz na macierz trójkątną dolną i górną,
+w metodach iteracyjnych potrzebujemy także diagonalną.
+
+- Metoda LU opiera się na rozwiązaniu dwóch układów równań liniowych $Ly=b$ oraz $Ux=y$, gdzie $Ux=y$
+to wektor pomocniczy, $L$ to macierz trójkątna dolna, a $U$ to górna.
+- Metoda Jacobiego opiera się na rozbiciu macierzy, tak aby $A = D-L-U$, gdzie $D$ to diagonalna.
+Z każdą następną iteracją obliczane są nowe przybliżenia rozwiązania.
+- Metoda Gaussa-Seidla jest zbliżona, lecz korzysta z najnowszych wartości $x^{k+1}$
+
+
+## Opis rozwiązywanego równania macierzowego
+
+W moim wypadku $a_1 = 13$, $f = 9$.
+
+$$
+\begin{bmatrix}
+13 & -1 & -1 & 0 & 0 & 0 & 0 & \dots & 0 \\
+-1 & 13 & -1 & -1 & 0 & 0 & 0 & \dots & 0 \\
+-1 & -1 & 13 & -1 & -1 & 0 & 0& \dots & 0 \\
+0 & -1 & -1 & 13 & -1 & -1 & 0 & \dots & 0 \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+0 & 0 & 0 & 0 & 0 & 0 & -1 & -1 & 13
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3 \\
+x_4 \\
+\vdots \\
+x_{907}
+\end{bmatrix}
+\begin{bmatrix}
+\sin(9) \\
+\sin(18) \\
+\sin(27) \\
+\sin(36) \\
+\vdots \\
+\sin(8163)
+\end{bmatrix}
+$$
+
+# Zadanie A
+
+Mając wcześniej zadeklarowane 3 macierze A, x, oraz b, uzupełnianie ich następuje w ten sposób:
+
+```{Rcpp, file='cpp/exercise_A.cpp', echo=TRUE, eval=FALSE}
+```
+
+
+Gdzie `A.init` to ta funkcja:
+
+```{Rcpp, file='cpp/generating_matrix.cpp', echo=TRUE, eval=FALSE}
+```
+
+# Zadanie B
+
+Jacobi wymagał 21 iteracji, zajęło mu to 0.197s, a Gauss-seidel 15 iteracji, czas wykonania 0.139s.
+
+Kod do metody Jacobiego:
+```{Rcpp, file='cpp/jacobi.cpp', echo=TRUE, eval=FALSE}
+```
+
+Kod do metody Gaussa-Seidla:
+```{Rcpp, file='cpp/gauss_seidel.cpp', echo=TRUE, eval=FALSE}
+```
+
+```{python, echo=FALSE}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+jacobi_data = np.genfromtxt('data/B_iterations_jacobi.csv', delimiter=',')
+gauss_seidel_data = np.genfromtxt('data/B_iterations_gauss_seidel.csv', delimiter=',')
+plt.figure(figsize=(10, 6))
+plt.plot(jacobi_data, label='Jacobi Method')
+plt.plot(gauss_seidel_data, label='Gauss-seidel Method')
+plt.yscale('log')
+plt.xlabel('Iteracja')
+plt.ylabel('Błąd rezydualny')
+plt.title('Zbieganie metody Jacobiego i Gaussa-Seidla')
+plt.legend()
+plt.show()
+```
+
+
+# Zadanie C
+
+```{python, echo=FALSE}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+jacobi_data = np.genfromtxt('data/C_iterations_jacobi.csv', delimiter=',')[:100]
+gauss_seidel_data = np.genfromtxt('data/C_iterations_gauss_seidel.csv', delimiter=',')[:100]
+plt.figure(figsize=(10, 6))
+plt.plot(jacobi_data, label='Jacobi Method')
+plt.plot(gauss_seidel_data, label='Gauss-seidel Method')
+plt.yscale('log')
+plt.xlabel('Iteracja')
+plt.ylabel('Błąd rezydualny')
+plt.title('Zbieganie metody Jacobiego i Gaussa-Seidla')
+plt.legend()
+plt.show()
+```
+
+# Zadanie D
+
+Błąd rezydualny: $1.38612 * 10^{-13}$. Błąd ten jest bardzo niski, więc wynik jest bardzo dokładny.
+Poprzednie metody zawiodły, a tutaj mamy bardzo dobry wynik.
+
+# Zadanie E
+
+```{python, echo=FALSE}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+jacobi_data = np.genfromtxt('data/jacobi_times.csv', delimiter=',')[:, 1]
+gauss_seidel_data = np.genfromtxt('data/gauss_seidel_times.csv', delimiter=',')[:, 1]
+lu_data = np.genfromtxt('data/lu_times.csv', delimiter=',')[:, 1]
+sizes = np.genfromtxt('data/lu_times.csv', delimiter=',')[:, 0]
+plt.title("Czas wykonania w zależności od rozmiaru macierzy")
+plt.plot(sizes, jacobi_data)
+plt.plot(sizes, gauss_seidel_data)
+plt.plot(sizes, lu_data)
+plt.legend(["Jacobi", "Gauss-Seidel", "LU"])
+plt.ylabel("Czas wykonania [s]")
+plt.xlabel("Rozmiar macierzy")
+```
+
+# Wnioski
+
+Metoda faktoryzacji LU daje najdokładniejsze wyniki z tych trzech sposobów, ale jest znacząco wolniejsza
+i bardzo źle się skaluje.
+Metody iteracyjne mają jedną znaczącą wadę: nie zawsze się zbiegają. Trzeba wtedy użyć innej metody, która
+jest w stanie obliczyć dla nas wynik.
