@@ -132,6 +132,10 @@ plt.show()
 
 # Zadanie D
 
+Wykorzystany kod:
+```{Rcpp, file='cpp/lu.cpp', echo=TRUE, eval=FALSE}
+```
+
 Błąd rezydualny: $1.38612 * 10^{-13}$. Błąd ten jest bardzo niski, więc wynik jest bardzo dokładny.
 Poprzednie metody zawiodły, a tutaj mamy bardzo dobry wynik.
 
