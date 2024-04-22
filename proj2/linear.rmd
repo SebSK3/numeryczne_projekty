@@ -1,7 +1,7 @@
 ---
 header-includes:
     - \usepackage{needspace}
-title: "Analiza MACD"
+title: "Implementacja sposobów rozwiązywania układów równań"
 author: "Sebastian Kwaśniak"
 date: "`r Sys.Date()`"
 geometry: margin=2cm
