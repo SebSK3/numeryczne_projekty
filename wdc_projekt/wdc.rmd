@@ -1,0 +1,84 @@
+---
+header-includes:
+    - \usepackage{needspace}
+    - \usetheme[numbering=fraction]{metropolis}
+    - \definecolor{beaublue}{rgb}{0.74, 0.83, 0.9}
+    - \setbeamertemplate{frame footer}{{\tiny\textcolor{beaublue}{Reverse proxy jako mechanizm izolacji aplikacji webowych}}}
+    - \makeatletter
+    - \def\ps@navigation@titlepage{\setbeamertemplate{footline}{}\@nameuse{ps@navigation}}
+    - \addtobeamertemplate{title page}{\thispagestyle{navigation@titlepage}}{}
+    - \pretocmd{\tableofcontents}{\thispagestyle{navigation@titlepage}}{}{}
+    - \setbeamertemplate{section in toc}{\leavevmode\inserttocsectionnumber. \inserttocsection\par}
+    - \makeatother
+title: "Reverse proxy jako mechanizm izolacji aplikacji webowych"
+author:
+    - "Sebastian Kwaśniak"
+    - "Anna Berkowska"
+    - "Artur Binczyk"
+    - "Jerzy Szyjut"
+    - "Damian Trowski"
+date: ""
+#geometry: margin=2cm
+output:
+    beamer_presentation:
+        latex_engine: xelatex
+bibliography: bibliography.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Wstęp
+
+Po co izolować aplikacje webowe?
+
+- Ciężej o eskalację uprawnień
+- Mitygacja ataków DDOS
+- Uproszczenie zarządzania certyfikatami
+
+# Jakie są opcje
+
+- Nginx
+- HAProxy
+- Traefik
+- Pingora
+
+# Jakie są opcje c.d
+
+- \color{green}Nginx\color{black} - solidny
+- \color{black}HAProxy - solidny
+- Traefik - meh
+- \color{red}Pingora \color{black} - blazingly fast
+
+# Terminacja SSL
+
+TODO: wpisać tu cokolwiek sensownego
+
+# Jak to wyglądałoby w praktyce
+
+```{tikz}
+
+\usetikzlibrary{shapes.geometric}
+
+\begin{tikzpicture}[node distance=2cm, auto]
+    % Nodes
+    \node [draw, minimum width=2cm] (routing) {HAProxy};
+
+    \node [draw=none, right of=routing, node distance=4cm] (app2) {};
+    \node [draw, minimum width=2cm, above of=app2] (app1) {Web1};
+    \node [draw, minimum width=2cm, below of=app2] (app3) {Web2} node[above] at (app3.north) {Terminacja SSL};
+
+    \node [draw, diamond, minimum width=2cm, node distance=4cm, right of=app1] (web1) {web1.delira.pl};
+    \node [draw, diamond, minimum width=2cm, node distance=4cm, right of=app3] (web2) {web2.delira.pl};
+
+
+
+    % Arrows
+    \draw[->] ([yshift=0.1cm]routing.east) -- node[midway, above, pos=0.5, font=\small] {Terminacja SSL} (app1.west);
+    \draw[->] ([yshift=-0.1cm]routing.east) -- (app3.west);
+
+    \draw[->] (app1.east) -- (web1.west);
+    \draw[->] (app3.east) -- (web2.west);
+\end{tikzpicture}
+```
