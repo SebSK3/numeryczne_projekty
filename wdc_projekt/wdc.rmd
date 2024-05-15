@@ -1,15 +1,7 @@
 ---
 header-includes:
     - \usepackage{needspace}
-    - \usetheme[numbering=fraction]{metropolis}
-    - \definecolor{beaublue}{rgb}{0.74, 0.83, 0.9}
-    - \setbeamertemplate{frame footer}{{\tiny\textcolor{beaublue}{Reverse proxy jako mechanizm izolacji aplikacji webowych}}}
-    - \makeatletter
-    - \def\ps@navigation@titlepage{\setbeamertemplate{footline}{}\@nameuse{ps@navigation}}
-    - \addtobeamertemplate{title page}{\thispagestyle{navigation@titlepage}}{}
-    - \pretocmd{\tableofcontents}{\thispagestyle{navigation@titlepage}}{}{}
-    - \setbeamertemplate{section in toc}{\leavevmode\inserttocsectionnumber. \inserttocsection\par}
-    - \makeatother
+    - \usetheme{Warsaw}
 title: "Reverse proxy jako mechanizm izolacji aplikacji webowych"
 author:
     - "Sebastian Kwaśniak"
@@ -46,7 +38,7 @@ Po co izolować aplikacje webowe?
 
 # Jakie są opcje c.d
 
-- \color{green}Nginx\color{black} - solidny
+- \color{green}Nginx \color{black} - solidny
 - \color{black}HAProxy - solidny
 - Traefik - meh
 - \color{red}Pingora \color{black} - blazingly fast
