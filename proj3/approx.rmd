@@ -77,9 +77,19 @@ S''_0(x_0)&=0 \\
 S''_0(x_n)&=0
 \end{flalign*}
 
+Znalezienie wielomianów $S$ sprowadza się do rozwiązania
+powyższego układu równań. Można z powyższych układów wyprowadzić
+wzory na $b$ oraz $d$ w zależności od $c$, a następnie rozwiązać
+cały układ równań dla wektora $c = [c_0, ..., c_{n-1}]$.
+
+W kodzie zaimplementowane jest to w następujący sposób:
+
+```{python, file='splines.py'}
+```
+
 ## Pierwiastki wielomianu Czebyszewa
 
-W trakcie pisania skorzystamy także z węzłów Czebyszewa, żeby zminimalizować efekt Rungego.
+W trakcie pisania wykorzystane będzie także z węzłów Czebyszewa, żeby zminimalizować efekt Rungego.
 Pierwiastki te są w postaci:
 
 $$

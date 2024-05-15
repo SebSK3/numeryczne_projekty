@@ -15,7 +15,8 @@ def splines(X, Y, num_interpolation=15, num_evaluated=1000, indexes=None):
         A[i][i] = 2 * (h[i-1] + h[i])
         A[i][i-1] = h[i-1]
         A[i][i+1] = h[i]
-        vec[i][0] = 3 * ((Y[indexes[i+1]] - Y[indexes[i]])/h[i] - (Y[indexes[i]] - Y[indexes[i-1]])/h[i-1])
+        vec[i][0] = 3 * ((Y[indexes[i+1]] - Y[indexes[i]])/h[i] - \
+                         (Y[indexes[i]] - Y[indexes[i-1]])/h[i-1])
     A[0][0] = 1
     A[n-1][n-1] = 1
     c = lu_solve(A, vec)
