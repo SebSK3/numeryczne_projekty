@@ -1,6 +1,15 @@
 from numpy import linspace
 from lu import lu_solve
 
+def solve_splines(x, n, indexes, X, a, b, c, d):
+    ix = n-1
+    for ix_num in range(len(indexes) - 1):
+        if X[indexes[ix_num]] <= x < X[indexes[ix_num + 1]]:
+            ix = ix_num
+            break
+    h = x-X[indexes[ix]]
+    return a[ix] + b[ix] * h + c[ix] * h**2 + d[ix] * h ** 3
+
 def splines(X, Y, num_interpolation=15, num_evaluated=1000, indexes=None):
     if indexes is None:
         indexes = [int(i) for i in linspace(0, len(X) - 1, num_interpolation)]
@@ -25,14 +34,6 @@ def splines(X, Y, num_interpolation=15, num_evaluated=1000, indexes=None):
         b.append((Y[indexes[i+1]] - Y[indexes[i]])/h[i] - h[i]/3 * (2 * c[i] + c[i+1]))
     b.append(0)
     d.append(0)
-    def F(x):
-        ix = n-1
-        for ix_num in range(len(indexes) - 1):
-            if X[indexes[ix_num]] <= x < X[indexes[ix_num + 1]]:
-                ix = ix_num
-                break
-        h = x-X[indexes[ix]]
-        return a[ix] + b[ix] * h + c[ix] * h**2 + d[ix] * h ** 3
     interpolated_X = list(linspace(X[0], X[-1], num_evaluated))
-    interpolated_Y = [F(x) for x in interpolated_X]
+    interpolated_Y = [solve_splines(x, n, indexes, X, a, b, c, d) for x in interpolated_X]
     return interpolated_X, interpolated_Y, indexes
