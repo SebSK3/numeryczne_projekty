@@ -73,6 +73,12 @@ $$
 
 jest bazą Lagrange'a.
 
+W kodzie zostało to zaimplementowane w następujący sposób:
+
+```{python, file='lagrange.py'}
+```
+
+
 ## Metoda krzywych sklejanych trzeciego stopnia
 
 Funkcja F ma postać[@wiki:Interpolacja_funkcjami_sklejanymi]
@@ -177,6 +183,14 @@ plots_specific_indexes("easy", "Lagrange: Trasa 1 (węzły Czebyszewa)",
 Efekt Rungego dla 20 węzłów został wyeliminowany, lecz nadal interpolacja nie jest w pełni poprawna
 i nie daje zadowalających wyników. Szczególnie widać to po 12 kilometrze.
 
+```{python, echo=FALSE}
+from functions import *
+from lu import lu_solve
+plots_specific_indexes("hard", "Lagrange: Trasa 3 (węzły Czebyszewa)",
+                       indexes=generate_czebyszew(20,427),
+                       interp_function=lagrange)
+```
+
 ## Podsumowanie metody Lagrange'a
 
 Wszystkie te trasy mają problem z efektem Rungego. Można spróbować wyeliminować ten efekt, poprzez skorzystanie z
@@ -230,7 +244,7 @@ szczególności można spojrzeć na 20 węzłów przy trasie trzeciej, gdzie jes
 
 # Wnioski
 
-Obie metody są przydatne, ale interpolacja z wykorzystaniem wielomianu Laplace'a jest
+Obie metody są przydatne, ale interpolacja z wykorzystaniem wielomianu Lagrange'a jest
 ograniczona przez efekt Rungego. Zjawisko to powoduje oscylacje na krańcach przedziału,
 wraz ze wzrostem ilości punktów węzłowych, co pogarsza jakość interpolacji.
 

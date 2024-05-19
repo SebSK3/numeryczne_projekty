@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 
 from pandas import read_csv
 
+from lagrange import lagrange
 
 DATA_DIR = "data/"
 MEDIA_DIR = "sprawozdanie/media/"
@@ -43,28 +44,6 @@ def interpolate_lagrange(x, X, Y):
         result += term
 
     return result
-
-def lagrange_polynomial(x, indexes, X, Y):
-    result = 0
-    for i in indexes:
-        term = Y[i]
-        for j in indexes:
-            if i != j:
-                term *= (x - X[j]) / (X[i] - X[j])
-        result += term
-    return result
-
-def lagrange(X, Y, num_interpolation=9, num_evaluated=1000, indexes=None):
-
-    if indexes is None:
-        indexes = [int(i) for i in linspace(0, len(X) - 1, num_interpolation)]
-
-    interpolated_X = list(linspace(X[0], X[-1], num_evaluated))
-    interpolated_Y = [lagrange_polynomial(x, indexes, X, Y) for x in interpolated_X]
-
-    return interpolated_X, interpolated_Y, indexes
-
-
 
 def evenly_spaced_plots(filename, title, interpolations=(6, 9, 15, 20), interp_function=lagrange):
     X, Y = read_profile(filename)
