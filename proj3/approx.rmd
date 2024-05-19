@@ -28,9 +28,9 @@ do profilów wysokościowych. Metody te to: wykorzystująca wielomian Lagrange'a
 funkcje składane trzeciego stopnia.
 
 Metoda Lagrange zwraca te same wyniki
-jak metoda Vandermonde, jednak nie musimy rozwiązywać układu równań liniowych.
+jak metoda Vandermonde, jednak nie jest wymagane rozwiązywanie układu równań liniowych.
 Metoda krzywych sklejanych trzeciego stopnia sprowadza się do rozwiązania
-układu równań. Do rozwiązania układu równań, zgodnie z zalecniem z wykładu, wykorzystamy metodę LU.
+układu równań. Do rozwiązania układu równań, zgodnie z zaleceniem z wykładu, wykrozystana zostanie metoda LU.
 
 ## Dane
 
@@ -64,9 +64,9 @@ $$
 F(x) = S_i(x); x \in [x_i, x_{i+1}]
 $$
 
-czyli szereg połączonych wielomianów S_i(x) takich, że $\deg(S_i)=3$.
-W celu uzyskania układów równań, z których pozyskamy współczynniki
-S_i(x) przyjmujemy założenia:
+czyli szereg połączonych wielomianów $S_i(x)$ takich, że $\deg(S_i)=3$.
+W celu uzyskania układów równań, z których pozyskane zostaną współczynniki
+$S_i(x)$ przyjęte są założenia:
 
 \begin{flalign*}
 S_i(x_i)&=y_i \\
@@ -89,7 +89,7 @@ W kodzie zaimplementowane jest to w następujący sposób:
 
 ## Pierwiastki wielomianu Czebyszewa
 
-W trakcie pisania wykorzystane będzie także z węzłów Czebyszewa, żeby zminimalizować efekt Rungego.
+W trakcie pisania korzystane będzie także z węzłów Czebyszewa, żeby zminimalizować efekt Rungego.
 Pierwiastki te są w postaci:
 
 $$
@@ -128,26 +128,26 @@ evenly_spaced_plots("hard", "Lagrange: Trasa 3", interp_function=lagrange)
 
 ## Trasa 1
 
-Dla tej trasy widzimy, że dla odcinku o stałym nachyleniu (np. od 9km do 11km)
+Dla tej trasy widać, że dla odcinku o stałym nachyleniu (np. od 9km do 11km)
 odzwierciedlenie jest najlepsze. Problemy są głównie przy nagłych spadkach i wzniesieniach,
 gdzie nawet zwiększenie liczby węzłów nie wpływa znacząco na poprawienie interpolacji.
-Do tego, już tutaj można zauważyć efekt Rungego przy 15 węzłach, a przy 20 już znacząco
+Dodatkowo, już tutaj można zauważyć efekt Rungego przy 15 węzłach, a przy 20 już znacząco
 wpływa na czytelność całego wykresu.
 
 ## Trasa 2
 
-Ta trasa jest najbardziej poszarpaną. Widzimy, że interpolacja tutaj jest bezużyteczna,
-a dodatkowo jeszcze musimy sobie poradzić z efektem Rungego przy większej ilości
+Ta trasa jest najbardziej poszarpaną. Łatwo zauważyć, że interpolacja tutaj jest bezużyteczna,
+a dodatkowo jeszcze trzeba sobie poradzić z efektem Rungego przy większej ilości
 węzłów. **Na jakość interpolacji znacząco wpływają nagłe wzniesienia, a dokładniej rozmieszczenia punktów**.
 
 ## Trasa 3
 
-Przy tej trasie, dla 15 węzłów widzimy, że gdyby pozbyć się efektu Rungego, to interpolacja wyglądąłaby całkiem znośnie.
+Przy tej trasie, dla 15 węzłów, gdyby pozbyć się efektu Rungego, to interpolacja wyglądąłaby całkiem sensownie.
 
 
 ## Eliminacja efektu Rungego
 
-Przy pomocy węzłów Czebyszewa możemy spróbować zminimalizować efekt Rungego.
+Przy pomocy węzłów Czebyszewa można spróbować zminimalizować efekt Rungego.
 
 ```{python, echo=FALSE}
 from functions import *
@@ -157,13 +157,13 @@ plots_specific_indexes("easy", "Lagrange: Trasa 1 (węzły Czebyszewa)",
                        interp_function=lagrange)
 ```
 
-Widzimy, że efekt Rungego dla 20 węzłów został wyeliminowany, lecz nadal interpolacja nie jest w pełni poprawna
+Efekt Rungego dla 20 węzłów został wyeliminowany, lecz nadal interpolacja nie jest w pełni poprawna
 i nie daje zadowalających wyników.
 
 ## Podsumowanie metody Lagrange'a
 
-Wszystkie te trasy mają problem z efektem Rungego. Możemy spróbować wyeliminować ten efekt, poprzez skorzystanie z
-węzłów Czebyszewa, lecz wyniki nadal nie są wystarczająco zadowalające. Możemy spróbować skorzystać z innej metody.
+Wszystkie te trasy mają problem z efektem Rungego. Można spróbować wyeliminować ten efekt, poprzez skorzystanie z
+węzłów Czebyszewa, lecz wyniki nadal nie są wystarczająco zadowalające.
 
 # Analiza interpolacji funkcjami sklejanymi trzeciego stopnia tras
 
@@ -195,20 +195,21 @@ brak efektu Rungego.
 
 ## Trasa 2
 
-Na tej trasie, przez liczne poszarpania, metoda wielomianowa od początku miała problemy. Tutaj widzimy, że
+Na tej trasie, przez liczne poszarpania, metoda wielomianowa od początku miała problemy. Tutaj widać, że
 interpolacja jest znacząco lepsza i użyteczna.
 
 ## Trasa 3
 
-W tym wypadku mamy idealnie zobrazowane zjawisko, że w tej metodzie im więcej węzłów, tym lepsza interpolacja.
+W tym wypadku jest idealnie zobrazowane zjawisko, że w tej metodzie im więcej węzłów, tym lepsza interpolacja.
 
 ## Podsumowanie interpolacji funkcjami sklejanymi
 
-Jak widzimy na każdym wykresie jak zwiększymy ilość węzłów, tym lepsze wyniki dostajemy.
-Tutaj nie ma problemu z efektem Rungego, dlatego możemy dostawać coraz dokładniejsze interpolacje.
-Jednak, przy np. przetwarzaniu sygnałów, chcemy pozbyć się bycia aż tak dokładnym i
-**"wygładzenie" może być pożądanym efektem**. Dla każdej trasy w tym wypadku mamy lepsze rezultaty. W szczególności
-można spojrzeć na 20 węzłów przy trasie trzeciej, gdzie jest to bardzo dobra interpolacja.
+Jak widać na każdym wykresie przy zwiększaniu ilość węzłów wyniki są coraz lepsze.
+Tutaj nie ma problemu z efektem Rungego, dlatego można uzyskać coraz dokładniejsze interpolacje.
+Jednak, przy np. przetwarzaniu sygnałów, niepożądane jest bycie aż tak dokładnym i
+**"wygładzenie" może być pożądanym efektem**.
+Niemniej, każda trasa jest lepiej interpolowana, w
+szczególności można spojrzeć na 20 węzłów przy trasie trzeciej, gdzie jest to najbardziej widoczne.
 
 # Wnioski
 
