@@ -1,6 +1,7 @@
 ---
 header-includes:
     - \usepackage{needspace}
+    - \usepackage{emoji}
     - \usetheme{Warsaw}
 title: "Reverse proxy jako mechanizm izolacji aplikacji webowych"
 author:
@@ -13,7 +14,7 @@ date: ""
 #geometry: margin=2cm
 output:
     beamer_presentation:
-        latex_engine: xelatex
+        latex_engine: lualatex
 bibliography: bibliography.bib
 ---
 
@@ -41,13 +42,13 @@ Po co izolować aplikacje webowe?
 - \color{green}Nginx \color{black} - solidny
 - \color{black}HAProxy - solidny
 - Traefik - meh
-- \color{red}Pingora \color{black} - blazingly fast
+- \color{red}Pingora \color{black} - blazingly fast \emoji{rocket} \emoji{rocket}
 
 # Terminacja SSL
 
 TODO: wpisać tu cokolwiek sensownego
 
-# Jak to wyglądałoby w praktyce
+# Jak to wyglądałoby w teorii
 
 ```{tikz}
 
