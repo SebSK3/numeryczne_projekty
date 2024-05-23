@@ -1,0 +1,11 @@
+root@delira:~# ping 192.168.5.11
+PING 192.168.5.11 (192.168.5.11) 56(84) bytes of data.
+^C
+--- 192.168.5.11 ping statistics ---
+12 packets transmitted, 0 received, 100% packet loss, time 11246ms
+
+root@web2.delira.pl:~# ping 192.168.5.5
+PING 192.168.5.5 (192.168.5.5) 56(84) bytes of data.
+^C
+--- 192.168.5.5 ping statistics ---
+13 packets transmitted, 0 received, 100% packet loss, time 12285ms
