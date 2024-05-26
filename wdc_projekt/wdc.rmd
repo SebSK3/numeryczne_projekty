@@ -30,6 +30,72 @@ Po co izolować aplikacje webowe?
 - Mitygacja ataków DDOS
 - Uproszczenie zarządzania certyfikatami
 
+# Terminacja SSL
+
+Czym jest terminacja SSL?
+TODO: tu wpisać rzeczy
+
+# Terminacja SSL
+
+Kiedy następuje terminacja SSL?
+TODO: tu wpisać rzeczy
+
+# Brak izolacji
+
+```{tikz}
+
+\usetikzlibrary{shapes.geometric}
+
+\begin{tikzpicture}[node distance=2cm, auto]
+    % Nodes
+
+    \node [draw, minimum width=2cm, minimum height=5cm] (server) {}; 
+    \node [above of=server] (servername) {Serwer};
+    \node [draw, node distance=1.0cm, below of=servername] (app1) {App 1};
+    \node [draw, node distance=1.0cm, below of=app1] (app2) {App 2};
+    \node [draw, node distance=1.0cm, below of=app2] (app3) {App 3};
+
+    \node [draw=none, left of=server, minimum width=0.1cm, node distance=5cm] (arrows) {};
+
+    \draw[->] (arrows.east) -- (server.west);
+    \draw[->] ([yshift=0.5cm]arrows.east) -- (server.west);
+    \draw[->] ([yshift=1.0cm]arrows.east) -- (server.west);
+    \draw[->] ([yshift=-0.5cm]arrows.east) -- (server.west);
+    \draw[->] ([yshift=-1.0cm]arrows.east) -- (server.west);
+    
+\end{tikzpicture}
+```
+
+# Izolacja
+
+```{tikz}
+
+\usetikzlibrary{shapes.geometric}
+
+\begin{tikzpicture}[node distance=2cm, auto]
+    % Nodes
+
+    \node [draw, minimum width=2cm, minimum height=5cm] (proxy) {Proxy}; 
+
+    \node [draw=none, left of=proxy, minimum width=0.1cm, node distance=5cm] (arrows) {};
+
+    \draw[->] (arrows.east) -- (proxy.west);
+    \draw[->] ([yshift=0.5cm]arrows.east) -- (proxy.west);
+    \draw[->] ([yshift=1.0cm]arrows.east) -- (proxy.west);
+    \draw[->] ([yshift=-0.5cm]arrows.east) -- (proxy.west);
+    \draw[->] ([yshift=-1.0cm]arrows.east) -- (proxy.west);
+
+    \node [draw, right of=proxy, node distance=5cm] (app2) {App 2};
+    \node [draw, above of=app2] (app1) {App 1};
+    \node [draw, below of=app2] (app3) {App 3};
+    
+    \draw[->] (proxy.east) -- (app1.west);
+    \draw[->] (proxy.east) -- (app2.west);
+    \draw[->] (proxy.east) -- (app3.west);
+    
+\end{tikzpicture}
+```
+
 # Jakie są opcje
 
 - Nginx
@@ -43,10 +109,6 @@ Po co izolować aplikacje webowe?
 - \color{black}HAProxy - solidny
 - Traefik - meh
 - \color{red}Pingora \color{black} - blazingly fast \emoji{rocket} \emoji{rocket}
-
-# Terminacja SSL
-
-TODO: wpisać tu cokolwiek sensownego
 
 # Jak to wyglądałoby w teorii
 
@@ -64,8 +126,6 @@ TODO: wpisać tu cokolwiek sensownego
 
     \node [draw, diamond, minimum width=2cm, node distance=4cm, right of=app1] (web1) {web1.delira.pl};
     \node [draw, diamond, minimum width=2cm, node distance=4cm, right of=app3] (web2) {web2.delira.pl};
-
-
 
     % Arrows
     \draw[->] ([yshift=0.1cm]routing.east) -- node[midway, above, pos=0.5, font=\small] {Terminacja SSL} (app1.west);
