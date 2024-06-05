@@ -8,6 +8,7 @@ author:
     - "Sebastian Kwaśniak"
     - "Anna Berkowska"
     - "Artur Binczyk"
+    - ""
     - "Jerzy Szyjut"
     - "Damian Trowski"
 date: ""
@@ -39,6 +40,10 @@ TODO: tu wpisać rzeczy
 
 Kiedy następuje terminacja SSL?
 TODO: tu wpisać rzeczy
+
+# Reverse Proxy
+
+Czym jest Reverse Proxy i czym się to różni od zwykłego Proxy?
 
 # Brak izolacji
 
