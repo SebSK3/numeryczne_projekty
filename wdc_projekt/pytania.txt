@@ -1,0 +1,15 @@
+1. Jak ogarniacie certyfikaty na serwerze?
+Odp: Skrypt acme.sh, podobne działanie do certbota.
+To taki potężny skrypt shellowy w którym potzeba mniej zależności niż w certbocie.
+2. A to nie działa tak, że nginx też jest serwerem webowym?
+odp: Tak, może serwować pliki, ale w typowych konfiguracjach np. z PHP
+i tak wszystko jest forwardowane do procesu który obsłuży PHP.
+3. Nie można wtedy podsłuchać ruchu w sieci przy za szybkiej terminacji SSL?
+Odp: I tak i nie, zależy czy mamy to dobrze pokonfigurowane, ale raczej to się nie zdarzy.
+Możemy też znowu zaszyfrować połączenie do docelowej aplikacji i ona może mieć
+tam własny certyfikat.
+Na labkach z sieci w następnym semie prawdopodobnie będziemy o tym mieli szczegółowo.
+4. A jakbym chciał w wakacje sobie coś u siebie postawić to co wybrać?
+odp: Definitywnie nginx na froncie, mega szybko da się załapać o co chodzi w konfiguracji
+i mnóstwo materiałów w internecie. Potem jak już ci się znudzi to możesz próbować jeszcze przed tym
+postawić haproxy, albo wersja hardmore spróbuj ogarnąć o co w ogóle chodzi w pingorze.
