@@ -67,6 +67,13 @@ W skrócie:
  - Metoda HTTP
 3. Przekazanie żądanie do odpowiedniego serwera na podstawie parametrów
 
+# Wady Reverse Proxy
+
+- SPOF (single point of failure)
+- Nie jest to prawdziwa izolacja
+- Dodaje opóźnienie
+- Większe koszta (wdrożenie, utrzymanie, zasobowe...)
+
 # Brak izolacji
 
 ```{tikz}
