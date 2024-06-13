@@ -3,11 +3,11 @@ header-includes:
     - \usepackage{needspace}
 title: "Reverse proxy jako mechanizm izolacji aplikacji webowych"
 author:
-    - "Sebastian Kwaśniak"
-    - "Anna Berkowska"
-    - "Artur Binczyk"
-    - "Jerzy Szyjut"
-    - "Damian Trowski"
+    - "Sebastian Kwaśniak 188807"
+    - "Anna Berkowska 189395"
+    - "Artur Binczyk 193138"
+    - "Jerzy Szyjut 193064"
+    - "Damian Trowski 193443"
 date: ""
 geometry: margin=2cm
 output:
